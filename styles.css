@@ -1,0 +1,40 @@
+body {
+  min-width: 300px;
+}
+
+h2 {
+  text-align: center;
+}
+
+/* Difficulty selection CSS */
+
+#difficulty {
+  flex: 0 0 100%;
+  text-align: center;
+}
+
+.difficulty-select {
+  font-size: large;
+  border: 1px solid black;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+#easy-btn {
+  color: #556b2f;
+}
+
+#med-btn {
+  color: #ffb800;
+}
+
+#hard-btn {
+  color: #ff2d08;
+}
+
+.selected {
+  background-color: rgb(227, 246, 141);
+}
+
+/* Status selection CSS */
