@@ -3,14 +3,69 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- <link href="node_modules\nouislider\dist\nouislider.css" rel="stylesheet">
+    <script src="node_modules\nouislider\dist\nouislider.js"></script> -->
     <h2>LeetCode Problem Picker</h2>
+    <div id="topics">Topics: Algorithms (others currently n/a)</div>
+    <br />
     <div id="difficulty">
+      <span class="label-text">Difficulty: </span>
       <span class="difficulty-select" id="easy-btn">Easy</span>
-      <span class="difficulty-select" id="med-btn">Med</span>
+      <span class="difficulty-select selected" id="med-btn">Med</span>
       <span class="difficulty-select" id="hard-btn">Hard</span>
     </div>
     <br />
-    <div id="status">Status: <span>TODO</span> <span>Solved</span></div>
+    <div id="status">
+      <span class="label-text">Status: </span>
+      <span class="status-select" id="todo-btn">TODO</span>
+      <span class="status-select" id="solved-btn">Solved</span>
+    </div>
+    <br />
+    <div id="acceptance">
+      <span class="label-text">Acceptance: </span>
+      <label for="target-acceptance">Target:</label>
+      <input
+        class="input-acceptance"
+        type="number"
+        id="target-acceptance"
+        name="target-acceptance"
+        min="0"
+        max="100"
+        value="60"
+      />%
+      <label for="variability-acceptance">+/-</label>
+      <input
+        class="input-acceptance"
+        type="number"
+        id="variability-acceptance"
+        name="variability-acceptance"
+        min="1"
+        max="50"
+        value="5"
+      />%
+    </div>
+    <br />
+    <div id="like-ratio">
+      <span class="label-text">&#128077 / &#128078 Ratio (Min):</span>
+      <input
+        type="range"
+        min="-4"
+        max="10"
+        value="0"
+        class="ratio-slider"
+        id="min-ratio"
+      /><span class="label-text" id="min-ratio-val">0</span><br />
+      <span class="label-text">&#128077 / &#128078 Ratio (Max):</span>
+      <input
+        type="range"
+        min="-4"
+        max="10"
+        value="3"
+        class="ratio-slider"
+        id="max-ratio"
+      /><span class="label-text" id="max-ratio-val">3</span><br />
+    </div>
+    <div id="slider"></div>
     <script src="popup.js"></script>
   </body>
 </html>

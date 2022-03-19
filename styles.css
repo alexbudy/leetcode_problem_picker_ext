@@ -1,5 +1,5 @@
 body {
-  min-width: 300px;
+  min-width: 350px;
 }
 
 h2 {
@@ -22,7 +22,7 @@ h2 {
 }
 
 #easy-btn {
-  color: #556b2f;
+  color: #5e8024;
 }
 
 #med-btn {
@@ -38,3 +38,40 @@ h2 {
 }
 
 /* Status selection CSS */
+#status {
+  flex: 0 0 100%;
+  text-align: center;
+}
+
+.label-text {
+  font-size: medium;
+  font-weight: bold;
+  /* padding-left: 12px; */
+}
+
+.status-select {
+  font-size: medium;
+  border: 1px solid black;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+#topics {
+  font-size: medium;
+  text-align: center;
+}
+
+/* Acceptance Styles */
+#acceptance {
+  font-size: medium;
+}
+
+.input-acceptance {
+  width: 50px;
+}
+
+/* Ratio Styles */
+.ratio-slider {
+  margin-right: 10px;
+}
