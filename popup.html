@@ -10,15 +10,15 @@
     <br />
     <div id="difficulty">
       <span class="label-text">Difficulty: </span>
-      <span class="difficulty-select" id="easy-btn">Easy</span>
-      <span class="difficulty-select selected" id="med-btn">Med</span>
-      <span class="difficulty-select" id="hard-btn">Hard</span>
+      <button class="difficulty-select" id="easy-btn">Easy</button>
+      <button class="difficulty-select selected" id="med-btn">Med</button>
+      <button class="difficulty-select" id="hard-btn">Hard</button>
     </div>
     <br />
     <div id="status">
       <span class="label-text">Status: </span>
-      <span class="status-select" id="todo-btn">TODO</span>
-      <span class="status-select" id="solved-btn">Solved</span>
+      <button class="status-select" id="todo-btn">TODO</button>
+      <button class="status-select" id="solved-btn">Solved</button>
     </div>
     <br />
     <div id="acceptance">
@@ -69,6 +69,14 @@
     <div id="premium">
       <label class="label-text" for="premium">Include Premium Problems</label>
       <input type="checkbox" id="include-chk">
+    </div>
+    <!-- <br> -->
+    <div id="button-container">
+      <span id="result-span"></span>
+      <br>
+      <button id="pick-problem">
+        Pick a Problem!
+      </button>
     </div>
     <script src="popup.js"></script>
   </body>
