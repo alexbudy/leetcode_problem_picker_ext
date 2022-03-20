@@ -3,19 +3,58 @@ var statusSelect = document.querySelectorAll(".status-select");
 var inputAcceptances = document.querySelectorAll(".input-acceptance");
 var minMaxRatioSliders = document.querySelectorAll(".ratio-slider");
 
-minMaxRatioSliders.forEach((el) => {
-  var ratio = el.id;
+var minRatioSlider = document.getElementById("min-ratio");
+var maxRatioSlider = document.getElementById("max-ratio");
 
-  chrome.storage.sync.get([ratio], function (items) {
-    if (items[ratio]) {
-      el.value = items[ratio];
-      document.getElementById(ratio + "-val").innerText = el.value;
+chrome.storage.sync.get(
+  [minRatioSlider.id, maxRatioSlider.id],
+  function (sliderValues) {
+    for (const id in sliderValues) {
+      document.getElementById(id).value = sliderValues[id];
+      document.getElementById(id + "-val").innerText = sliderValues[id];
     }
-  });
+  }
+);
 
-  el.addEventListener("change", (ev) => {
-    chrome.storage.sync.set({ [ratio]: el.value });
-    document.getElementById(ratio + "-val").innerText = el.value;
+function setRatioText(sliderEl) {
+  let val = sliderEl.value;
+  let sliderId = sliderEl.id;
+  let txt;
+  // Slider range from 0 to 10, so call 4 -> 1:1
+  if (val == 3) {
+    txt = "1:1";
+  } else if (val < 3) {
+    txt = `1:${4 - val}`;
+  } else {
+    txt = `${val - 2}:1`;
+  }
+  document.getElementById(sliderId + "-val").innerText = txt;
+}
+
+minRatioSlider.addEventListener("change", (ev) => {
+  minRatioSlider.value = Math.min(minRatioSlider.value, maxRatioSlider.value);
+
+  chrome.storage.sync.set({ [minRatioSlider.id]: minRatioSlider.value });
+  setRatioText(minRatioSlider);
+});
+
+maxRatioSlider.addEventListener("change", (ev) => {
+  maxRatioSlider.value = Math.max(maxRatioSlider.value, minRatioSlider.value);
+
+  chrome.storage.sync.set({ [maxRatioSlider.id]: maxRatioSlider.value });
+  setRatioText(maxRatioSlider);
+});
+
+var includePremiumChk = document.getElementById("include-chk");
+chrome.storage.sync.get([includePremiumChk.id], function (items) {
+  if (items[includePremiumChk.id]) {
+    includePremiumChk.checked = items[includePremiumChk.id];
+  }
+});
+
+includePremiumChk.addEventListener("change", (ev) => {
+  chrome.storage.sync.set({
+    [includePremiumChk.id]: includePremiumChk.checked,
   });
 });
 

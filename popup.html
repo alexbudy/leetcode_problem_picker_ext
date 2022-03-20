@@ -49,23 +49,27 @@
       <span class="label-text">&#128077 / &#128078 Ratio (Min):</span>
       <input
         type="range"
-        min="-4"
-        max="10"
-        value="0"
+        min="0"
+        max="9"
+        value="3"
         class="ratio-slider"
         id="min-ratio"
       /><span class="label-text" id="min-ratio-val">0</span><br />
       <span class="label-text">&#128077 / &#128078 Ratio (Max):</span>
       <input
         type="range"
-        min="-4"
-        max="10"
-        value="3"
+        min="0"
+        max="9"
+        value="7"
         class="ratio-slider"
         id="max-ratio"
       /><span class="label-text" id="max-ratio-val">3</span><br />
     </div>
-    <div id="slider"></div>
+    <br>
+    <div id="premium">
+      <label class="label-text" for="premium">Include Premium Problems</label>
+      <input type="checkbox" id="include-chk">
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>
