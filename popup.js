@@ -6,43 +6,43 @@ var minMaxRatioSliders = document.querySelectorAll(".ratio-slider");
 var minRatioSlider = document.getElementById("min-ratio");
 var maxRatioSlider = document.getElementById("max-ratio");
 
-chrome.storage.sync.get(
-  [minRatioSlider.id, maxRatioSlider.id],
-  function (sliderValues) {
-    for (const id in sliderValues) {
-      document.getElementById(id).value = sliderValues[id];
-      document.getElementById(id + "-val").innerText = sliderValues[id];
-    }
-  }
-);
-
-function setRatioText(sliderEl) {
-  let val = sliderEl.value;
+function setRatioText(sliderEl, val = null) {
+  let sliderVal = val ? val : sliderEl.value;
   let sliderId = sliderEl.id;
   let txt;
-  // Slider range from 0 to 10, so call 4 -> 1:1
-  if (val == 3) {
+  // Slider range from 0 to 9, so call 3 -> 1:1
+  if (sliderVal == 3) {
     txt = "1:1";
-  } else if (val < 3) {
-    txt = `1:${4 - val}`;
+  } else if (sliderVal < 3) {
+    txt = `1:${4 - sliderVal}`;
   } else {
-    txt = `${val - 2}:1`;
+    txt = `${sliderVal - 2}:1`;
   }
   document.getElementById(sliderId + "-val").innerText = txt;
 }
 
-minRatioSlider.addEventListener("change", (ev) => {
-  minRatioSlider.value = Math.min(minRatioSlider.value, maxRatioSlider.value);
+chrome.storage.sync.get(
+  [minRatioSlider.id, maxRatioSlider.id],
+  function (sliderValues) {
+    for (const id in sliderValues) {
+      let slider = document.getElementById(id);
+      slider.value = sliderValues[id];
+      setRatioText(slider, sliderValues[id]);
+    }
+  }
+);
 
-  chrome.storage.sync.set({ [minRatioSlider.id]: minRatioSlider.value });
-  setRatioText(minRatioSlider);
-});
+[minRatioSlider, maxRatioSlider].forEach((slider) => {
+  slider.addEventListener("change", (ev) => {
+    if (slider == minRatioSlider) {
+      slider.value = Math.min(minRatioSlider.value, maxRatioSlider.value);
+    } else {
+      slider.value = Math.max(maxRatioSlider.value, minRatioSlider.value);
+    }
 
-maxRatioSlider.addEventListener("change", (ev) => {
-  maxRatioSlider.value = Math.max(maxRatioSlider.value, minRatioSlider.value);
-
-  chrome.storage.sync.set({ [maxRatioSlider.id]: maxRatioSlider.value });
-  setRatioText(maxRatioSlider);
+    chrome.storage.sync.set({ [slider]: slider.value });
+    setRatioText(slider);
+  });
 });
 
 var includePremiumChk = document.getElementById("include-chk");
