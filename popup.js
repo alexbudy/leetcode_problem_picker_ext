@@ -18,6 +18,11 @@ function setRatioText(sliderEl, val = null) {
   } else {
     txt = `${sliderVal - 2}:1`;
   }
+  if (sliderVal == 0) {
+    txt = "<=" + txt;
+  } else if (sliderVal == 9) {
+    txt += "+";
+  }
   document.getElementById(sliderId + "-val").innerText = txt;
 }
 
