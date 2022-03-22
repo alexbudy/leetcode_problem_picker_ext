@@ -1284,7 +1284,7 @@
 1284  Minimum Number of Flips to Convert Binary Matrix to Zero Matrix  /problems/minimum-number-of-flips-to-convert-binary-matrix-to-zero-matrix  False  71.9%  Hard
 1285  Find the Start and End Number of Continuous Ranges  /problems/find-the-start-and-end-number-of-continuous-ranges  True  88.2%  Medium
 1286  Iterator for Combination  /problems/iterator-for-combination  False  73.2%  Medium
-1287  Element Appearing More Than 25%  In Sorted Array  /problems/element-appearing-more-than-25-in-sorted-array  False  59.5%  Easy
+1287  Element Appearing More Than 25% In Sorted Array  /problems/element-appearing-more-than-25-in-sorted-array  False  59.5%  Easy
 1288  Remove Covered Intervals  /problems/remove-covered-intervals  False  57.4%  Medium
 1289  Minimum Falling Path Sum II  /problems/minimum-falling-path-sum-ii  False  61.4%  Hard
 1290  Convert Binary Number in a Linked List to Integer  /problems/convert-binary-number-in-a-linked-list-to-integer  False  82.7%  Easy
@@ -1557,7 +1557,7 @@
 1557  Minimum Number of Vertices to Reach All Nodes  /problems/minimum-number-of-vertices-to-reach-all-nodes  False  78.3%  Medium
 1558  Minimum Numbers of Function Calls to Make Target Array  /problems/minimum-numbers-of-function-calls-to-make-target-array  False  63.9%  Medium
 1559  Detect Cycles in 2D Grid  /problems/detect-cycles-in-2d-grid  False  47.9%  Medium
-1560  Most Visited Sector in  a Circular Track  /problems/most-visited-sector-in-a-circular-track  False  58.0%  Easy
+1560  Most Visited Sector in a Circular Track  /problems/most-visited-sector-in-a-circular-track  False  58.0%  Easy
 1561  Maximum Number of Coins You Can Get  /problems/maximum-number-of-coins-you-can-get  False  78.2%  Medium
 1562  Find Latest Group of Size M  /problems/find-latest-group-of-size-m  False  40.7%  Medium
 1563  Stone Game V  /problems/stone-game-v  False  40.8%  Hard
