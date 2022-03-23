@@ -1,7 +1,8 @@
+import { is_premium_or_logged_in } from "./modules/lib.js";
+
 var difficultySelect = document.querySelectorAll(".difficulty-select");
 var statusSelect = document.querySelectorAll(".status-select");
 var inputAcceptances = document.querySelectorAll(".input-acceptance");
-var minMaxRatioSliders = document.querySelectorAll(".ratio-slider");
 
 var minRatioSlider = document.getElementById("min-ratio");
 var maxRatioSlider = document.getElementById("max-ratio");
@@ -57,9 +58,24 @@ chrome.storage.sync.get([includePremiumChk.id], function (items) {
   }
 });
 
-includePremiumChk.addEventListener("change", (ev) => {
-  chrome.storage.sync.set({
-    [includePremiumChk.id]: includePremiumChk.checked,
+includePremiumChk.addEventListener("change", () => {
+  is_premium_or_logged_in().then((ret) => {
+    if (includePremiumChk.checked) {
+      const [is_signed_in, is_prem] = ret;
+
+      if (!is_signed_in) {
+        alert("Must login first to solve premium LeetCode problems.");
+        includePremiumChk.checked = false;
+        return;
+      } else if (!is_prem) {
+        alert("Must be a premium member to solve premium LeetCode problems.");
+        includePremiumChk.checked = false;
+        return;
+      }
+      chrome.storage.sync.set({
+        [includePremiumChk.id]: includePremiumChk.checked,
+      });
+    }
   });
 });
 
