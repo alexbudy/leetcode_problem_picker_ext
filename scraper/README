@@ -1,0 +1,3 @@
+Scraper scripts, code here may fully functional as it was slightly tweaked to get all the data properly along the way
+
+chromedriver.exe needs to be downloaded and matching your local Chrome version, with the PATH pointing to its location
