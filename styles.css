@@ -65,6 +65,7 @@ h2 {
 /* Acceptance Styles */
 #acceptance {
   font-size: medium;
+  text-align: center;
 }
 
 .input-acceptance {
@@ -101,6 +102,7 @@ h2 {
 }
 
 #pick-problem {
+  font-size: large;
   height: 40px;
   width: 50%;
 }
