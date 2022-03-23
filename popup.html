@@ -6,7 +6,11 @@
     <!-- <link href="node_modules\nouislider\dist\nouislider.css" rel="stylesheet">
     <script src="node_modules\nouislider\dist\nouislider.js"></script> -->
     <h2>LeetCode Problem Picker</h2>
-    <div id="topics">Topics: Algorithms (others currently n/a)</div>
+    <div id="topics">
+      <span class="label-text">Topics: </span>
+      <button class="topic-select selected" id="alg-btn">Algorithms</button>
+      <button class="topic-select" id="db-btn">DB</button>
+    </div>
     <br />
     <div id="difficulty">
       <span class="label-text">Difficulty: </span>
@@ -15,11 +19,13 @@
       <button class="difficulty-select" id="hard-btn">Hard</button>
     </div>
     <br />
-    <div id="status">
-      <span class="label-text">Status: </span>
-      <button class="status-select" id="todo-btn">TODO</button>
-      <button class="status-select" id="solved-btn">Solved</button>
-    </div>
+    <!-- <div id="status">
+      <span class="label-text">Status*: </span>
+      <button disabled class="status-select" id="todo-btn">TODO</button>
+      <button disabled class="status-select" id="solved-btn">Solved</button>
+      <br>
+      * Disabled, as currently no way to parse user's completed problems
+    </div> -->
     <br />
     <div id="acceptance">
       <span class="label-text">Acceptance: </span>

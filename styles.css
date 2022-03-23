@@ -6,14 +6,16 @@ h2 {
   text-align: center;
 }
 
-/* Difficulty selection CSS */
+/* Difficulty/Topic selection CSS */
 
-#difficulty {
+#difficulty,
+#topics {
   flex: 0 0 100%;
   text-align: center;
 }
 
-.difficulty-select {
+.difficulty-select,
+.topic-select {
   font-size: large;
   cursor: pointer;
   padding: 5px;

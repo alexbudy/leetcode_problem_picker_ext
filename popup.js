@@ -1,6 +1,8 @@
 import { is_premium_or_logged_in } from "./modules/lib.js";
 
-var difficultySelect = document.querySelectorAll(".difficulty-select");
+var difficultiesAndTopics = document.querySelectorAll(
+  ".difficulty-select, .topic-select"
+);
 var statusSelect = document.querySelectorAll(".status-select");
 var inputAcceptances = document.querySelectorAll(".input-acceptance");
 
@@ -79,22 +81,27 @@ includePremiumChk.addEventListener("change", () => {
   });
 });
 
-difficultySelect.forEach((el) => {
-  var difficulty = el.id.split("-")[0];
-  chrome.storage.sync.get([difficulty], function (items) {
-    if (items[difficulty]) {
-      el.classList.toggle("selected");
+difficultiesAndTopics.forEach((el) => {
+  var difficultyOrTopic = el.id.split("-")[0];
+  chrome.storage.sync.get([difficultyOrTopic], function (items) {
+    console.log(items[difficultyOrTopic]);
+    if (difficultyOrTopic in items) {
+      if (items[difficultyOrTopic]) {
+        el.classList.add("selected");
+      } else {
+        el.classList.remove("selected");
+      }
     }
   });
 
   el.addEventListener("click", (ev) => {
     el.classList.toggle("selected");
     chrome.storage.sync.set(
-      { [difficulty]: el.classList.contains("selected") },
+      { [difficultyOrTopic]: el.classList.contains("selected") },
       () => {
         console.log(
           "Settings saved",
-          difficulty,
+          difficultyOrTopic,
           el.classList.contains("selected")
         );
       }
