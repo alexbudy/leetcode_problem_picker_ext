@@ -1,5 +1,5 @@
 body {
-  min-width: 350px;
+  min-width: 360px;
 }
 
 h2 {
@@ -8,14 +8,12 @@ h2 {
 
 /* Difficulty/Topic selection CSS */
 
-#difficulty,
-#topics {
+.option-container {
   flex: 0 0 100%;
   text-align: center;
 }
 
-.difficulty-select,
-.topic-select {
+.option-select {
   font-size: large;
   cursor: pointer;
   padding: 5px;
@@ -48,13 +46,6 @@ h2 {
   font-size: medium;
   font-weight: bold;
   /* padding-left: 12px; */
-}
-
-.status-select {
-  font-size: medium;
-  cursor: pointer;
-  padding: 5px;
-  margin-left: 5px;
 }
 
 #topics {

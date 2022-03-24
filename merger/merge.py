@@ -10,7 +10,7 @@ with open('premium.txt') as premiums, open('non-premium.txt') as non_prems:
   for line in lines:
     num, ul, dl, vs = [int(n) for n in line.split()]
     probs[num] = {'uplikes': ul, 'downlikes': dl, 'verbosity': vs,
-                  'category': 'DB' if num in db_probs else 'ALG'}
+                  'category': 'DB' if num in db_probs else 'ALG'} # can also be SH or CONCURRENCY
 
 with open('problem_list.csv') as pl_orig, open('problem_list_complete.csv', 'w', newline='') as pl_full:
   reader = csv.DictReader(pl_orig)

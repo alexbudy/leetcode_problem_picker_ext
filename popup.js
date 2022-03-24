@@ -1,29 +1,44 @@
-import { is_premium_or_logged_in } from "./modules/lib.js";
+import { pickProblem } from "./modules/lib.js";
 
-var difficultiesAndTopics = document.querySelectorAll(
-  ".difficulty-select, .topic-select"
-);
-var statusSelect = document.querySelectorAll(".status-select");
+var allOptions = document.querySelectorAll(".option-select");
 var inputAcceptances = document.querySelectorAll(".input-acceptance");
 
 var minRatioSlider = document.getElementById("min-ratio");
 var maxRatioSlider = document.getElementById("max-ratio");
 
+const SCALE = [1, 10, 25, 40, 60, 80];
+
+/* Object to pass to pickProblem */
+let filters = {
+  difficulties: ["MED"],
+  topics: ["ALG"],
+  paywall: ["FREE"],
+  acceptance_base: 60.0,
+  acceptance_range: 5.0,
+  ratio_min: 1.0,
+  ratio_max: 5.0,
+};
+
+/* Helper fn to get the ratios on the likes scale */
+function getRatioFromSliderVal(val) {
+  val = parseInt(val); // 0 to 6
+  return SCALE[val];
+}
+
 function setRatioText(sliderEl, val = null) {
   let sliderVal = val ? val : sliderEl.value;
   let sliderId = sliderEl.id;
+  let ratio = getRatioFromSliderVal(sliderVal);
   let txt;
-  // Slider range from 0 to 9, so call 3 -> 1:1
-  if (sliderVal == 3) {
-    txt = "1:1";
-  } else if (sliderVal < 3) {
-    txt = `1:${4 - sliderVal}`;
+  if (ratio >= 1) {
+    txt = `${ratio}:1`;
   } else {
-    txt = `${sliderVal - 2}:1`;
+    txt = `1:${1 / ratio}`;
   }
-  if (sliderVal == 0) {
+
+  if (ratio == SCALE[0] && sliderId == "min-ratio") {
     txt = "<=" + txt;
-  } else if (sliderVal == 9) {
+  } else if (ratio == SCALE.at(-1) && sliderId == "max-ratio") {
     txt += "+";
   }
   document.getElementById(sliderId + "-val").innerText = txt;
@@ -36,6 +51,7 @@ chrome.storage.sync.get(
       let slider = document.getElementById(id);
       slider.value = sliderValues[id];
       setRatioText(slider, sliderValues[id]);
+      updateFilterWithValue(id, slider.value);
     }
   }
 );
@@ -48,81 +64,105 @@ chrome.storage.sync.get(
       slider.value = Math.max(maxRatioSlider.value, minRatioSlider.value);
     }
 
-    chrome.storage.sync.set({ [slider]: slider.value });
     setRatioText(slider);
+    setOptionInStorageAndFilter(slider.id, slider.value);
   });
 });
 
-var includePremiumChk = document.getElementById("include-chk");
-chrome.storage.sync.get([includePremiumChk.id], function (items) {
-  if (items[includePremiumChk.id]) {
-    includePremiumChk.checked = items[includePremiumChk.id];
-  }
-});
-
-includePremiumChk.addEventListener("change", () => {
-  is_premium_or_logged_in().then((ret) => {
-    if (includePremiumChk.checked) {
-      const [is_signed_in, is_prem] = ret;
-
-      if (!is_signed_in) {
-        alert("Must login first to solve premium LeetCode problems.");
-        includePremiumChk.checked = false;
-        return;
-      } else if (!is_prem) {
-        alert("Must be a premium member to solve premium LeetCode problems.");
-        includePremiumChk.checked = false;
-        return;
-      }
-      chrome.storage.sync.set({
-        [includePremiumChk.id]: includePremiumChk.checked,
-      });
-    }
-  });
-});
-
-difficultiesAndTopics.forEach((el) => {
-  var difficultyOrTopic = el.id.split("-")[0];
-  chrome.storage.sync.get([difficultyOrTopic], function (items) {
-    console.log(items[difficultyOrTopic]);
-    if (difficultyOrTopic in items) {
-      if (items[difficultyOrTopic]) {
+allOptions.forEach((el) => {
+  var option = el.id.split("-")[0];
+  chrome.storage.sync.get([option], function (items) {
+    if (option in items) {
+      if (items[option]) {
         el.classList.add("selected");
       } else {
         el.classList.remove("selected");
       }
+      updateFilterWithValue(option, items[option]);
+    } else {
+      updateFilterWithValue(option, false);
     }
   });
 
   el.addEventListener("click", (ev) => {
     el.classList.toggle("selected");
-    chrome.storage.sync.set(
-      { [difficultyOrTopic]: el.classList.contains("selected") },
-      () => {
-        console.log(
-          "Settings saved",
-          difficultyOrTopic,
-          el.classList.contains("selected")
-        );
+    // Because of CORS policy, can't make requests to www.leetcode.com,
+    // so better to remove this check for now
+    // if (el.id == "premium-btn" && el.classList.contains("selected")) {
+    //   isPremiumOrLoggedIn().then((ret) => {
+    //     const [is_signed_in, is_prem] = ret;
+
+    //     if (!is_signed_in) {
+    //       alert("Must login first to solve premium LeetCode problems.");
+    //       el.classList.remove("selected");
+    //     } else if (!is_prem) {
+    //       alert("Must be a premium member to solve premium LeetCode problems.");
+    //       el.classList.remove("selected");
+    //     }
+
+    //     setOptionInStorageAndFilter(option, el.classList.contains("selected"));
+    //   });
+    // }
+
+    setOptionInStorageAndFilter(option, el.classList.contains("selected"));
+  });
+});
+
+function updateFilterWithValue(option, val) {
+  option = option.toUpperCase();
+  if (["MED", "EASY", "HARD"].includes(option)) {
+    if (val) {
+      if (!filters.difficulties.includes(option)) {
+        filters.difficulties.push(option);
       }
-    );
-  });
-});
-
-statusSelect.forEach((el) => {
-  var status = el.id.split("-")[0];
-
-  chrome.storage.sync.get([status], function (items) {
-    if (items[status]) {
-      el.classList.toggle("selected");
+    } else {
+      filters.difficulties = filters.difficulties.filter(function (
+        val,
+        idx,
+        arr
+      ) {
+        return val != option;
+      });
     }
-  });
+  } else if (["ALG", "DB"].includes(option)) {
+    if (val) {
+      if (!filters.topics.includes(option)) {
+        filters.topics.push(option);
+      }
+    } else {
+      filters.topics = filters.topics.filter(function (val, idx, arr) {
+        return val != option;
+      });
+    }
+  } else if (["FREE", "PREM"].includes(option)) {
+    if (val) {
+      if (!filters.paywall.includes(option)) {
+        filters.paywall.push(option);
+      }
+    } else {
+      filters.paywall = filters.paywall.filter(function (val, idx, arr) {
+        return val != option;
+      });
+    }
+  } else if (option == "TARGET-ACCEPTANCE") {
+    filters.acceptance_base = parseFloat(val);
+  } else if (option == "VARIABILITY-ACCEPTANCE") {
+    filters.acceptance_range = parseFloat(val);
+  } else if (option == "MIN-RATIO") {
+    filters.ratio_min = getRatioFromSliderVal(val);
+    if (filters.ratio_min <= SCALE[0]) filters.ratio_min = 0;
+  } else if (option == "MAX-RATIO") {
+    filters.ratio_max = getRatioFromSliderVal(val);
+    if (filters.ratio_max >= SCALE.at(-1)) filters.ratio_max = 100;
+  }
+}
 
-  el.addEventListener("click", (ev) => {
-    el.classList.toggle("selected");
-    chrome.storage.sync.set({ [status]: el.classList.contains("selected") });
-  });
-});
+function setOptionInStorageAndFilter(option, val) {
+  chrome.storage.sync.set(
+    { [option]: val },
+    updateFilterWithValue.bind(null, option, val)
+  );
+}
 
 inputAcceptances.forEach((el) => {
   var acceptances = el.id;
@@ -130,11 +170,20 @@ inputAcceptances.forEach((el) => {
   chrome.storage.sync.get([acceptances], function (items) {
     if (items[acceptances]) {
       el.value = items[acceptances];
+      updateFilterWithValue(acceptances, items[acceptances]);
     }
   });
 
-  el.addEventListener("change", (ev) => {
-    console.log("changing", ev);
-    chrome.storage.sync.set({ [acceptances]: el.value });
+  el.addEventListener("input", (ev) => {
+    setOptionInStorageAndFilter(acceptances, el.value);
   });
+});
+
+document.getElementById("pick-problem-btn").addEventListener("click", () => {
+  let [candidateProblems, totalMatchingCriteria] = pickProblem(filters, 5);
+  console.log(candidateProblems);
+  console.log(totalMatchingCriteria);
+  for (const prob of candidateProblems) {
+    console.log("https://leetcode.com" + prob[2]);
+  }
 });

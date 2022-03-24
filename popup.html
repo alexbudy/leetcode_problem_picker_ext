@@ -1,6 +1,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="styles.css" />
+    <script src="modules/papaparse.min.js"></script>
   </head>
   <body>
     <!-- 
@@ -8,17 +9,23 @@
     <link href="node_modules\nouislider\dist\nouislider.css" rel="stylesheet">
     <script src="node_modules\nouislider\dist\nouislider.js"></script> -->
     <h2>LeetCode Problem Picker</h2>
-    <div id="topics">
+    <div class="option-container">
       <span class="label-text">Topics: </span>
-      <button class="topic-select selected" id="alg-btn">Algorithms</button>
-      <button class="topic-select" id="db-btn">DB</button>
+      <button class="option-select selected" id="alg-btn">Algorithms</button>
+      <button class="option-select" id="db-btn">DB</button>
     </div>
     <br />
-    <div id="difficulty">
+    <div class="option-container">
       <span class="label-text">Difficulty: </span>
-      <button class="difficulty-select" id="easy-btn">Easy</button>
-      <button class="difficulty-select selected" id="med-btn">Med</button>
-      <button class="difficulty-select" id="hard-btn">Hard</button>
+      <button class="option-select" id="easy-btn">Easy</button>
+      <button class="option-select selected" id="med-btn">Med</button>
+      <button class="option-select" id="hard-btn">Hard</button>
+    </div>
+    <br />
+    <div class="option-container">
+      <span class="label-text">Problems: </span>
+      <button class="option-select selected" id="free-btn">Free</button>
+      <button class="option-select" id="prem-btn">Premium</button>
     </div>
     <br />
     <!-- <div id="status">
@@ -56,8 +63,8 @@
       <input
         type="range"
         min="0"
-        max="9"
-        value="3"
+        max="5"
+        value="2"
         class="ratio-slider"
         id="min-ratio"
       /><span class="label-text" id="min-ratio-val">0</span><br />
@@ -65,21 +72,16 @@
       <input
         type="range"
         min="0"
-        max="9"
-        value="7"
+        max="5"
+        value="3"
         class="ratio-slider"
         id="max-ratio"
       /><span class="label-text" id="max-ratio-val">3</span><br />
     </div>
-    <br>
-    <div id="premium">
-      <label class="label-text" for="premium">Include Premium Problems</label>
-      <input type="checkbox" id="include-chk">
-    </div>
     <div id="button-container">
       <span id="result-span"></span>
       <br>
-      <button id="pick-problem">
+      <button id="pick-problem-btn">
         Pick a Problem!
       </button>
     </div>
