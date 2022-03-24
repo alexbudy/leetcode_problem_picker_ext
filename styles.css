@@ -78,13 +78,14 @@ h2 {
 }
 
 /* Button/result styles */
-#result-span {
+#result-div {
   border: 1px solid black;
-  display: inline-block;
-  margin-bottom: 10px;
+  display: block;
   margin-top: 10px;
-  min-height: 50px;
+  min-height: 75px;
+  padding-top: 30px;
   display: none;
+  font-size: large;
   width: -webkit-fill-available;
 }
 
@@ -92,7 +93,7 @@ h2 {
   text-align: center;
 }
 
-#pick-problem {
+#pick-problem-btn {
   font-size: large;
   height: 40px;
   width: 50%;

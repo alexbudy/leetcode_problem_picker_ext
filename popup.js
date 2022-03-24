@@ -180,10 +180,16 @@ inputAcceptances.forEach((el) => {
 });
 
 document.getElementById("pick-problem-btn").addEventListener("click", () => {
+  let resultDiv = document.getElementById("result-div");
   let [candidateProblems, totalMatchingCriteria] = pickProblem(filters, 5);
-  console.log(candidateProblems);
-  console.log(totalMatchingCriteria);
-  for (const prob of candidateProblems) {
-    console.log("https://leetcode.com" + prob[2]);
+
+  resultDiv.style.display = "block";
+  if (candidateProblems.length > 0) {
+    let prob =
+      candidateProblems[Math.floor(Math.random() * candidateProblems.length)];
+    resultDiv.innerHTML = `<a target="_blank" href="https://leetcode.com${prob[2]}">${prob[0]}: ${prob[1]}</a>`;
+  } else {
+    resultDiv.innerText =
+      "No found problem for given criteria, please try again!";
   }
 });

@@ -48,10 +48,12 @@ function pickProblem(filters, probCount = 5) {
       continue;
     candidates.push(i);
   }
-  if (candidates.length <= probCount) return candidates;
 
   let ret_indices = [];
-  while (ret_indices.length < probCount) {
+  while (
+    ret_indices.length < probCount &&
+    candidates.length > ret_indices.length
+  ) {
     var r = Math.floor(Math.random() * candidates.length);
     if (ret_indices.indexOf(candidates[r]) === -1)
       ret_indices.push(candidates[r]);
@@ -67,4 +69,4 @@ function pickProblem(filters, probCount = 5) {
   return [return_problems, candidates.length];
 }
 
-export { isPremiumOrLoggedIn, pickProblem };
+export { pickProblem };
