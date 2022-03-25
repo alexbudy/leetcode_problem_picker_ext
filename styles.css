@@ -20,15 +20,15 @@ h2 {
   margin-left: 5px;
 }
 
-#easy-btn {
+.easy-color {
   color: #5e8024;
 }
 
-#med-btn {
+.med-color {
   color: #ffb800;
 }
 
-#hard-btn {
+.hard-color {
   color: #ff2d08;
 }
 
@@ -83,7 +83,8 @@ h2 {
   display: block;
   margin-top: 10px;
   min-height: 75px;
-  padding-top: 30px;
+  padding-bottom: 5px;
+  padding-top: 10px;
   display: none;
   font-size: large;
   width: -webkit-fill-available;
@@ -97,4 +98,8 @@ h2 {
   font-size: large;
   height: 40px;
   width: 50%;
+}
+
+.problem-link {
+  font-weight: bold;
 }

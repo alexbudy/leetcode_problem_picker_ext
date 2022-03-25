@@ -179,17 +179,55 @@ inputAcceptances.forEach((el) => {
   });
 });
 
-document.getElementById("pick-problem-btn").addEventListener("click", () => {
-  let resultDiv = document.getElementById("result-div");
-  let [candidateProblems, totalMatchingCriteria] = pickProblem(filters, 5);
+function displayProblem(prob, candidateLength) {
+  if (!prob) return;
 
+  let resultDiv = document.getElementById("result-div");
   resultDiv.style.display = "block";
+
+  let acceptance = prob[4];
+  let diff = prob[5];
+  let likes = prob[6];
+  let dislikes = prob[7];
+  let linkClass;
+  if (diff == "EASY") {
+    linkClass = "easy-color";
+  } else if (diff == "MED") {
+    linkClass = "med-color";
+  } else {
+    linkClass = "hard-color";
+  }
+  resultDiv.innerHTML = `<a class="${linkClass} problem-link" target="_blank" href="https://leetcode.com${prob[2]}">${prob[0]}: ${prob[1]}</a>`;
+  resultDiv.innerHTML += `<div>(Out of ${candidateLength})</div>`;
+  resultDiv.innerHTML += `<div><span style="font-weight:bold">Acceptance:</span> ${acceptance}</div>`;
+  resultDiv.innerHTML += `<div><span style="font-weight:bold">Like/Dislike:</span> ${likes}/${dislikes} (${
+    Math.round((likes / dislikes) * 10) / 10
+  }%) </div>`;
+}
+
+chrome.storage.sync.get(["problem", "candidateLength"], (item) => {
+  if (item) {
+    displayProblem(item["problem"], item["candidateLength"]);
+  }
+});
+
+document.getElementById("pick-problem-btn").addEventListener("click", () => {
+  let [candidateProblems, candidateLength] = pickProblem(filters, 5);
+
   if (candidateProblems.length > 0) {
     let prob =
       candidateProblems[Math.floor(Math.random() * candidateProblems.length)];
-    resultDiv.innerHTML = `<a target="_blank" href="https://leetcode.com${prob[2]}">${prob[0]}: ${prob[1]}</a>`;
+    chrome.storage.sync.set({
+      problem: prob,
+      candidateLength: candidateLength,
+    });
+    displayProblem(prob, candidateLength);
   } else {
+    let resultDiv = document.getElementById("result-div");
+    resultDiv.style.display = "block";
+
     resultDiv.innerText =
       "No found problem for given criteria, please try again!";
+    chrome.storage.sync.remove("problem");
   }
 });

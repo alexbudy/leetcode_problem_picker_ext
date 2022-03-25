@@ -27,6 +27,7 @@ async function isPremiumOrLoggedIn() {
 
 // Returns the problems, and problems chosen from
 function pickProblem(filters, probCount = 5) {
+  console.log(filters);
   let candidates = [];
   // skip header row
   for (let i = 1; i < problemSet.length; i++) {
