@@ -198,24 +198,26 @@ chrome.storage.sync.get(["problem", "candidateLength"], (item) => {
 });
 
 document.getElementById("pick-problem-btn").addEventListener("click", () => {
-  let [candidateProblems, candidateLength] = pickProblem(filters, 5);
+  pickProblem(filters, 5).then(function (probs) {
+    let [candidateProblems, candidateLength] = probs;
 
-  if (candidateProblems.length > 0) {
-    let prob =
-      candidateProblems[Math.floor(Math.random() * candidateProblems.length)];
-    chrome.storage.sync.set({
-      problem: prob,
-      candidateLength: candidateLength,
-    });
-    displayProblem(prob, candidateLength);
-  } else {
-    let resultDiv = document.getElementById("result-div");
-    resultDiv.style.display = "block";
+    if (candidateProblems.length > 0) {
+      let prob =
+        candidateProblems[Math.floor(Math.random() * candidateProblems.length)];
+      chrome.storage.sync.set({
+        problem: prob,
+        candidateLength: candidateLength,
+      });
+      displayProblem(prob, candidateLength);
+    } else {
+      let resultDiv = document.getElementById("result-div");
+      resultDiv.style.display = "block";
 
-    resultDiv.innerText =
-      "No found problem for given criteria, please try again!";
-    chrome.storage.sync.remove("problem");
-  }
+      resultDiv.innerText =
+        "No found problem for given criteria, please try again!";
+      chrome.storage.sync.remove("problem");
+    }
+  });
 });
 
 function setTextAreaWithProblemsArray(arr) {

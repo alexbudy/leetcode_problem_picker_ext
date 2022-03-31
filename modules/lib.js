@@ -43,7 +43,15 @@ async function isPremiumOrLoggedIn() {
 }
 
 // Returns the problems, and problems chosen from
-function pickProblem(filters, probCount = 5) {
+async function pickProblem(filters, probCount = 5) {
+  var p = new Promise(function (res, rej) {
+    chrome.storage.sync.get(["avoidedProblems"], (probs) => {
+      res(probs["avoidedProblems"]);
+    });
+  });
+
+  let avoidedProblems = await p;
+
   let candidates = [];
   // skip header row
   for (let i = 1; i < problemSet.length; i++) {
@@ -63,6 +71,8 @@ function pickProblem(filters, probCount = 5) {
       continue;
     if (like_ratio < filters.ratio_min || like_ratio > filters.ratio_max)
       continue;
+    if (avoidedProblems.includes(num)) continue;
+
     candidates.push(i);
   }
 
