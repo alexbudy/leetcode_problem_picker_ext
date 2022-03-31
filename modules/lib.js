@@ -1,12 +1,29 @@
 // Load in the dataset form a CSV
 var problemSet = [];
+var problem_map = {};
 Papa.parse("./problem_list_complete.csv", {
   download: true,
   skipEmptyLines: true,
   complete: function (res) {
     problemSet = res.data;
+
+    for (let i = 0; i < problemSet.length; i++) {
+      let num = problemSet[i][0];
+      problem_map[num] = problemSet[i];
+    }
   },
 });
+
+function getProblemsForNumbers(arr) {
+  let probs = {};
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] in problem_map) {
+      probs[arr[i]] = problem_map[arr[i]];
+    }
+  }
+
+  return probs;
+}
 
 async function isPremiumOrLoggedIn() {
   let data = await fetch("https://leetcode.com/")
@@ -27,7 +44,6 @@ async function isPremiumOrLoggedIn() {
 
 // Returns the problems, and problems chosen from
 function pickProblem(filters, probCount = 5) {
-  console.log(filters);
   let candidates = [];
   // skip header row
   for (let i = 1; i < problemSet.length; i++) {
@@ -70,4 +86,4 @@ function pickProblem(filters, probCount = 5) {
   return [return_problems, candidates.length];
 }
 
-export { pickProblem };
+export { pickProblem, getProblemsForNumbers };

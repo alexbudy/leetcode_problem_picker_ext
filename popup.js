@@ -1,4 +1,4 @@
-import { pickProblem } from "./modules/lib.js";
+import { pickProblem, getProblemsForNumbers } from "./modules/lib.js";
 
 var allOptions = document.querySelectorAll(".option-select");
 var inputAcceptances = document.querySelectorAll(".input-acceptance");
@@ -86,23 +86,6 @@ allOptions.forEach((el) => {
 
   el.addEventListener("click", (ev) => {
     el.classList.toggle("selected");
-    // Because of CORS policy, can't make requests to www.leetcode.com,
-    // so better to remove this check for now
-    // if (el.id == "premium-btn" && el.classList.contains("selected")) {
-    //   isPremiumOrLoggedIn().then((ret) => {
-    //     const [is_signed_in, is_prem] = ret;
-
-    //     if (!is_signed_in) {
-    //       alert("Must login first to solve premium LeetCode problems.");
-    //       el.classList.remove("selected");
-    //     } else if (!is_prem) {
-    //       alert("Must be a premium member to solve premium LeetCode problems.");
-    //       el.classList.remove("selected");
-    //     }
-
-    //     setOptionInStorageAndFilter(option, el.classList.contains("selected"));
-    //   });
-    // }
 
     setOptionInStorageAndFilter(option, el.classList.contains("selected"));
   });
@@ -197,7 +180,10 @@ function displayProblem(prob, candidateLength) {
   } else {
     linkClass = "hard-color";
   }
-  resultDiv.innerHTML = `<a class="${linkClass} problem-link" target="_blank" href="https://leetcode.com${prob[2]}">${prob[0]}: ${prob[1]}</a>`;
+  let isPrem = prob[3] !== "FREE";
+  let optionalAsterisk = isPrem ? "*" : "";
+
+  resultDiv.innerHTML = `<a class="${linkClass} problem-link" target="_blank" href="https://leetcode.com${prob[2]}">${prob[0]}: ${prob[1]}  ${optionalAsterisk}</a>`;
   resultDiv.innerHTML += `<div>(Out of ${candidateLength})</div>`;
   resultDiv.innerHTML += `<div><span style="font-weight:bold">Acceptance:</span> ${acceptance}</div>`;
   resultDiv.innerHTML += `<div><span style="font-weight:bold">Like/Dislike:</span> ${likes}/${dislikes} (${
@@ -229,5 +215,69 @@ document.getElementById("pick-problem-btn").addEventListener("click", () => {
     resultDiv.innerText =
       "No found problem for given criteria, please try again!";
     chrome.storage.sync.remove("problem");
+  }
+});
+
+function setTextAreaWithProblemsArray(arr) {
+  let problemsTextArea = document.getElementById("textarea");
+  let problems = getProblemsForNumbers(arr);
+
+  problemsTextArea.value = "";
+  for (let i = 0; i < arr.length; i++) {
+    let pNum = arr[i];
+    if (pNum in problems) {
+      problemsTextArea.value += `${pNum} - ${problems[pNum][1]}  \n`;
+    }
+  }
+}
+
+document
+  .getElementById("completed-problems-btn")
+  .addEventListener("click", () => {
+    chrome.storage.sync.get(["avoidedProblems"], (arr) => {
+      togglePopup();
+      setTextAreaWithProblemsArray(arr["avoidedProblems"]);
+    });
+  });
+
+document.getElementById("save-problems-btn").addEventListener("click", () => {
+  let problems = document.getElementById("textarea").value.trim().split("\n");
+  let sortedProblems = new Set();
+  for (let i = 0; i < problems.length; i++) {
+    let pNum = problems[i].split("-")[0].trim();
+    if (isNaN(pNum)) {
+      alert(`Found not a number ${problems[i]} on line ${i + 1}`);
+      return;
+    }
+    if (pNum.length !== 0) {
+      sortedProblems.add(parseInt(pNum));
+    }
+  }
+
+  let inputProblemsArray = Array.from(sortedProblems).sort((a, b) => {
+    return a - b;
+  });
+  chrome.storage.sync.set({ avoidedProblems: inputProblemsArray });
+  setTextAreaWithProblemsArray(inputProblemsArray);
+});
+
+function togglePopup(hide = false) {
+  let popup = document.getElementById("popup");
+  if (hide) {
+    popup.style.display = "none";
+  } else {
+    popup.style.display = popup.style.display === "none" ? "" : "none";
+  }
+}
+
+// Catch click outside the popup
+window.addEventListener("click", function (e) {
+  if (document.getElementById("popup").contains(e.target)) {
+    // Clicked in box
+  } else if (
+    !document.getElementById("completed-problems-btn").contains(e.target)
+  ) {
+    // Clicked outside the box
+    togglePopup(true);
   }
 });

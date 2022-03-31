@@ -13,6 +13,7 @@
       <span class="label-text">Topics: </span>
       <button class="option-select selected" id="alg-btn">Algorithms</button>
       <button class="option-select" id="db-btn">DB</button>
+      <!-- <span class="completed-problems">Completed Problems</span> -->
     </div>
     <br />
     <div class="option-container">
@@ -28,6 +29,12 @@
       <button class="option-select" id="prem-btn">Premium</button>
     </div>
     <br />
+    <div id="popup" style="display: none">
+      <h2>Completed Problems</h2>
+      <textarea id="textarea" rows="20" cols="40"></textarea>
+      <br>
+      <button id="save-problems-btn">Save</button>
+    </div>
     <!-- <div id="status">
       <span class="label-text">Status*: </span>
       <button disabled class="status-select" id="todo-btn">TODO</button>
@@ -79,11 +86,13 @@
       /><span class="label-text" id="max-ratio-val">3</span><br />
     </div>
     <div id="button-container">
-      <div id="result-div">test</div>
+      <div id="result-div"></div>
       <br>
       <button id="pick-problem-btn">
         Pick a Problem!
       </button>
+      <br>
+      <button id="completed-problems-btn">Completed Problems</button>
     </div>
     <script src="popup.js" type="module"></script>
   </body>

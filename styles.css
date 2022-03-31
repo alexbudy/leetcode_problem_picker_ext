@@ -84,7 +84,7 @@ h2 {
   margin-top: 10px;
   min-height: 75px;
   padding-bottom: 5px;
-  padding-top: 10px;
+  padding-top: 5px;
   display: none;
   font-size: large;
   width: -webkit-fill-available;
@@ -102,4 +102,32 @@ h2 {
 
 .problem-link {
   font-weight: bold;
+}
+
+#completed-problems-btn {
+  margin-top: 10px;
+}
+
+#popup {
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  width: 80%;
+  height: 82%;
+  border: 1px solid black;
+  background: rgb(227, 246, 141);
+}
+
+#textarea {
+  width: 80%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#save-problems-btn {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
 }
