@@ -90,6 +90,11 @@ h2 {
   width: -webkit-fill-available;
 }
 
+#mark-completed-btn {
+  margin-top: 5px;
+  display: none;
+}
+
 #button-container {
   text-align: center;
 }

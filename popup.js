@@ -183,18 +183,38 @@ function displayProblem(prob, candidateLength) {
   let isPrem = prob[3] !== "FREE";
   let optionalAsterisk = isPrem ? "*" : "";
 
-  resultDiv.innerHTML = `<a class="${linkClass} problem-link" target="_blank" href="https://leetcode.com${prob[2]}">${prob[0]}: ${prob[1]}  ${optionalAsterisk}</a>`;
-  resultDiv.innerHTML += `<div>(Out of ${candidateLength})</div>`;
-  resultDiv.innerHTML += `<div><span style="font-weight:bold">Acceptance:</span> ${acceptance}</div>`;
-  resultDiv.innerHTML += `<div><span style="font-weight:bold">Like/Dislike:</span> ${likes}/${dislikes} (${
+  let resultSpan = document.getElementById("result-span");
+
+  resultSpan.innerHTML = `<a class="${linkClass} problem-link" target="_blank" href="https://leetcode.com${prob[2]}">${prob[0]}: ${prob[1]}  ${optionalAsterisk}</a>`;
+  resultSpan.innerHTML += `<div>(Out of ${candidateLength})</div>`;
+  resultSpan.innerHTML += `<div><span style="font-weight:bold">Acceptance:</span> ${acceptance}</div>`;
+  resultSpan.innerHTML += `<div><span style="font-weight:bold">Like/Dislike:</span> ${likes}/${dislikes} (${
     Math.round((likes / dislikes) * 10) / 10
   }%) </div>`;
+
+  let btn = document.getElementById("mark-completed-btn");
+  btn.style.display = "inline";
 }
 
 chrome.storage.sync.get(["problem", "candidateLength"], (item) => {
   if (item) {
     displayProblem(item["problem"], item["candidateLength"]);
   }
+});
+
+document.getElementById("mark-completed-btn").addEventListener("click", () => {
+  chrome.storage.sync.get(["problem", "avoidedProblems"], (item) => {
+    if (item) {
+      let pNum = parseInt(item["problem"][0]);
+      if (!item["avoidedProblems"].includes(pNum)) {
+        item["avoidedProblems"].push(pNum);
+        item["avoidedProblems"].sort((a, b) => {
+          return a - b;
+        });
+        chrome.storage.sync.set({ avoidedProblems: item["avoidedProblems"] });
+      }
+    }
+  });
 });
 
 document.getElementById("pick-problem-btn").addEventListener("click", () => {
@@ -213,9 +233,13 @@ document.getElementById("pick-problem-btn").addEventListener("click", () => {
       let resultDiv = document.getElementById("result-div");
       resultDiv.style.display = "block";
 
-      resultDiv.innerText =
+      let resultSpan = document.getElementById("result-span");
+      resultSpan.innerText =
         "No found problem for given criteria, please try again!";
+
       chrome.storage.sync.remove("problem");
+      let btn = document.getElementById("mark-completed-btn");
+      btn.style.display = "none";
     }
   });
 });
