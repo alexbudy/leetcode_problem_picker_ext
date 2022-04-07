@@ -136,3 +136,7 @@ h2 {
   margin-right: auto;
   margin-bottom: 10px;
 }
+
+#last-data-scrape {
+  float: right;
+}
